@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+##Shorthand to remove gatekeeper quarantine attribute from a single application.
+
+unq=$1
+
+if [[ ${#unq} == 0 ]]; then
+	echo "Remove gatekeeper quarantine attribute from an application."
+	echo "Usage: sudo unq APPNAME"
+	exit;
+fi
+
+APPNAME="$2"
+
+if [[ ${#APPNAME} > 0 ]]; then
+	cd /Applications
+	if [[ -e "$APPNAME".app ]]; then
+		xattr -rd com.apple.quarantine /Applications/"$APPNAME".app
+		echo "Quarantine attribute has been removed from \"$APPNAME\"."
+		exit;
+	else
+		echo "An application with the name \"$APPNAME\" does not exist."
+		echo "Make sure the application is not in a subdirectory of /Applications."
+		exit;
+	fi
+fi
